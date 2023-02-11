@@ -1,7 +1,19 @@
 import Head from "next/head";
 import Image from "next/image";
+import axios from "axios";
 
 export default function Home() {
+  const callCheckout = async () => {
+    const result = await axios.post("api/paymentUrl");
+    console.log(result);
+    if (result.status === 200) {
+      window.location = result.data.paymentUrl;
+    } else {
+      alert(
+        "You have already started this payment. Please continue the payment or start from order again."
+      );
+    }
+  };
   return (
     <>
       <Head>
@@ -10,6 +22,10 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
+      <button onClick={callCheckout}>
+        <Image src="/paymentButton.png" alt="me" width="200" height="100" />
+      </button>
     </>
   );
 }
