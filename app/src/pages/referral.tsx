@@ -2,7 +2,14 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useWeb3Modal } from "@web3modal/react";
 import { useAccount } from "wagmi";
-import { Button, Center, Stack, Container, Input } from "@chakra-ui/react";
+import {
+  Button,
+  Center,
+  Stack,
+  Container,
+  Input,
+  Text,
+} from "@chakra-ui/react";
 
 export default function Referral() {
   const router = useRouter();
@@ -16,7 +23,6 @@ export default function Referral() {
   }, []);
 
   useEffect(() => {
-    console.log(address);
     if (address) {
       setDisplayAddress(
         `${address.substring(0, 4)}...${address.substring(address.length - 5)}`
@@ -28,9 +34,11 @@ export default function Referral() {
   return (
     <>
       <Container maxW="md" my="10">
-        <Stack my="6" spacing="3">
+        <Stack my="6" spacing="3" mx="5">
+          <Text>1. Enter referral code and wallet you would like to use.</Text>
           <Input placeholder="referral code" />
           <Input placeholder="receiving wallet address" />
+          <Text>2. Connect wallet to pay for gas.</Text>
           {isConnected ? (
             <>
               <Button onClick={() => open()}>{displayAddress}</Button>
@@ -40,9 +48,9 @@ export default function Referral() {
               <Button onClick={() => open()}>Connect Wallet</Button>
             </>
           )}
-
+          <Text>3. Press button to approve the transaction.</Text>
           <Button isDisabled={!isConnected} onClick={() => router.push("/")}>
-            Create!!
+            Issue Referral Code!!
           </Button>
         </Stack>
 

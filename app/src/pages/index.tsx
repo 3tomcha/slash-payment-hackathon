@@ -16,6 +16,7 @@ import {
   Flex,
   Spacer,
   Container,
+  Input,
 } from "@chakra-ui/react";
 
 export default function Home() {
@@ -51,15 +52,20 @@ export default function Home() {
           <Divider />
           <Center>
             <CardFooter>
-              <button onClick={callCheckout}>
-                <Image src="/paymentButton.png" alt="me" htmlWidth="200" />
-              </button>
+              <Stack>
+                <Input placeholder="referral code" />
+                <Box>
+                  <button onClick={callCheckout}>
+                    <Image src="/paymentButton.png" alt="me" htmlWidth="200" />
+                  </button>
+                </Box>
+              </Stack>
             </CardFooter>
           </Center>
         </Card>
         <Center>
           <Button onClick={() => router.push("/referral")}>
-            Create Referral Code
+            Issue Referral Code
           </Button>
         </Center>
       </Container>
