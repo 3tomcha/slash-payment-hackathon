@@ -11,39 +11,55 @@ contract ReferralExtension is ISlashCustomPlugin, Ownable {
 
     struct Referral {
         address rewardAddress;
-        uint16  rewardRate;
-        uint16  cashBackRate;
+        uint16 rewardRate;
+        uint16 cashBackRate;
     }
 
     uint16 public constant RATE_PRECISION = 10000;
     mapping(string => Referral) private _referralCode;
 
+    /**
+     * @dev Receive payment
+     * @param _receiveToken receive token
+     * @param _amount amount
+     * @param _reserved reserved
+     */
     function receivePayment(
         address _receiveToken,
         uint256 _amount,
         bytes calldata,
         string calldata,
-        bytes calldata  _reserved
+        bytes calldata _reserved
     ) external payable override {
         require(_amount > 0, "invalid amount");
-        
+
         string memory usedReferralCode = abi.decode(_reserved, (string));
         Referral memory referral = _referralCode[usedReferralCode];
 
-        uint256 rewardAmount = _amount * referral.rewardRate / RATE_PRECISION;
-        uint256 cashBackAmount = _amount * referral.cashBackRate / RATE_PRECISION;
+        uint256 rewardAmount = (_amount * referral.rewardRate) / RATE_PRECISION;
+        uint256 cashBackAmount = (_amount * referral.cashBackRate) /
+            RATE_PRECISION;
         uint256 ownerAmount = _amount - rewardAmount - cashBackAmount;
 
         if (rewardAmount > 0) {
-            IERC20(_receiveToken).universalTransfer(referral.rewardAddress, rewardAmount);
+            IERC20(_receiveToken).universalTransfer(
+                referral.rewardAddress,
+                rewardAmount
+            );
         }
-        if(cashBackAmount > 0) {
+        if (cashBackAmount > 0) {
             IERC20(_receiveToken).universalTransfer(msg.sender, cashBackAmount);
         }
         IERC20(_receiveToken).universalTransfer(owner(), ownerAmount);
-
     }
 
+    /**
+     * @dev Set referral code
+     * @param _code referral code
+     * @param _rewardAddress reward address
+     * @param _rewardRate reward rate
+     * @param _cashBackRate cash back rate
+     */
     function setReferralCode(
         string memory _code,
         address _rewardAddress,
@@ -52,43 +68,31 @@ contract ReferralExtension is ISlashCustomPlugin, Ownable {
     ) external onlyOwner {
         require(_rewardRate + _cashBackRate <= RATE_PRECISION, "invalid rate");
         require(_rewardAddress != address(0), "invalid reward address");
-        require(_referralCode[_code].rewardAddress == address(0), "code already exists");
+        require(
+            _referralCode[_code].rewardAddress == address(0),
+            "code already exists"
+        );
 
-        _referralCode[_code] = Referral(_rewardAddress, _rewardRate, _cashBackRate);
+        _referralCode[_code] = Referral(
+            _rewardAddress,
+            _rewardRate,
+            _cashBackRate
+        );
     }
 
+    /**
+     * @dev Delete referral code
+     * @param _code referral code
+     */
     function deleteReferralCode(string memory _code) external onlyOwner {
-        require(_referralCode[_code].rewardAddress != address(0), "code not exists");
+        require(
+            _referralCode[_code].rewardAddress != address(0),
+            "code not exists"
+        );
 
         delete _referralCode[_code];
     }
 
-    function withdrawToken(address tokenContract) external onlyOwner {
-        require(
-            IERC20(tokenContract).universalBalanceOf(address(this)) > 0,
-            "balance is zero"
-        );
-
-        IERC20(tokenContract).universalTransfer(
-            msg.sender,
-            IERC20(tokenContract).universalBalanceOf(address(this))
-        );
-
-        emit TokenWithdrawn(
-            tokenContract,
-            IERC20(tokenContract).universalBalanceOf(address(this))
-        );
-    }
-
-    event TokenWithdrawn(address tokenContract, uint256 amount);
-
-    /**
-     * @dev Check if the contract is Slash Plugin
-     *
-     * Requirement
-     * - Implement this function in the contract
-     * - Return true
-     */
     function supportSlashExtensionInterface()
         external
         pure
@@ -106,5 +110,4 @@ contract ReferralExtension is ISlashCustomPlugin, Ownable {
     ) public view virtual returns (bool) {
         return false;
     }
-
 }
