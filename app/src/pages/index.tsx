@@ -1,10 +1,10 @@
 import { useRouter } from "next/router";
+import { useState } from "react";
 import axios from "axios";
 import {
   Image,
   Box,
   Button,
-  ButtonGroup,
   Card,
   CardBody,
   CardFooter,
@@ -13,16 +13,19 @@ import {
   Heading,
   Stack,
   Text,
-  Flex,
-  Spacer,
   Container,
   Input,
 } from "@chakra-ui/react";
 
 export default function Home() {
   const router = useRouter();
+  const [referralCode, setReferralCode] = useState("");
   const callCheckout = async () => {
-    const result = await axios.post("api/paymentUrl");
+    // chakra ui get input value
+
+    const result = await axios.post("api/paymentUrl", {
+      referralCode: referralCode,
+    });
     if (result.status === 200) {
       window.location = result.data.paymentUrl;
     } else {
@@ -53,7 +56,10 @@ export default function Home() {
           <Center>
             <CardFooter>
               <Stack>
-                <Input placeholder="referral code" />
+                <Input
+                  placeholder="referral code"
+                  onChange={(e) => setReferralCode(e.target.value)}
+                />
                 <Box>
                   <button onClick={callCheckout}>
                     <Image src="/paymentButton.png" alt="me" htmlWidth="200" />

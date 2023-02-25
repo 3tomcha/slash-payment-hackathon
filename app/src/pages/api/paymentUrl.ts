@@ -10,6 +10,9 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
+  // get request body
+  const { referralCode } = req.body;
+
   // retrieve product data from database
   // ***　Omitted because it is a hackathon　***
   const amount = Number(process.env.NEXT_PUBLIC_PRICE); /* Price */
@@ -31,6 +34,8 @@ export default async function handler(
     verify_token: hashHex,
     amount: amount,
     amount_type: amountType,
+    ext_reserved: referralCode,
+    ext_description: referralCode ? `referral code: ${referralCode}` : "",
   };
   const paymentRequestUrl = process.env.SLASH_PAYMENT_REQUEST_URL ?? "";
   const result = await axios
