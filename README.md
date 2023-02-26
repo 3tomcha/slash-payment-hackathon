@@ -13,13 +13,15 @@ https://back-slash.vercel.app/
 
 テストサイトでは以下の設定をしています。
 
+コントラクトオーナー : `0xD214146C6E6051eeDF4de733Aa1d62F089D5928A`
+https://blockscout.com/astar/tx/0x6a7caa458e4d59d8e82f735a7e881ff8078de6b3582dcc86206870b5682b33e5
 
-| リファラルコード | 紹介報酬振り込みwallet | 報酬率 | 購入者へのキャッシュバック率 | 
-| ------------- | ------------- | ------------- | ------------- | 
-| なし  | - | -  | -  |
-| test1 | `0xdfe3DDBcB66cbC3a88816C0f876F76b2B60884fe` | 1% | 2% |
-| test2 | `0xDeBeA7Bf019285Cd3ddAd69A6aC1c6E5260d1083` | 3% | 0% |
-| test3 | - | 0% | 5% |
+| リファラルコード | 紹介報酬振り込みwallet | 報酬率 | 購入者へのキャッシュバック率 | 実行tx例
+| ------------- | ------------- | ------------- | ------------- |  ------------- | 
+| なし  | - | - | - | [Link](https://blockscout.com/astar/tx/0x6a7caa458e4d59d8e82f735a7e881ff8078de6b3582dcc86206870b5682b33e5) |
+| test1 | `0xdfe3DDBcB66cbC3a88816C0f876F76b2B60884fe` | 1% | 2% |　[Link](https://blockscout.com/astar/tx/0x2675efce01c2b55edb1b364070f451be282cbd0d1d2b47282fa4fbe41b09a088) |
+| test2 | `0xDeBeA7Bf019285Cd3ddAd69A6aC1c6E5260d1083` | 3% | 0% | [Link](https://blockscout.com/astar/tx/)　|
+| test3 | - | 0% | 5% | [Link](https://blockscout.com/astar/tx/) |
 
 ## コントラクト
 
