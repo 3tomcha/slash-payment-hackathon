@@ -69,11 +69,6 @@ export default function Home() {
             </CardFooter>
           </Center>
         </Card>
-        <Center>
-          <Button onClick={() => router.push("/referral")}>
-            Issue Referral Code
-          </Button>
-        </Center>
       </Container>
     </>
   );
