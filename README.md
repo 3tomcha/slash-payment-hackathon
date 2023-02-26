@@ -20,8 +20,8 @@ https://blockscout.com/astar/tx/0x6a7caa458e4d59d8e82f735a7e881ff8078de6b3582dcc
 | ------------- | ------------- | ------------- | ------------- |  ------------- | 
 | なし  | - | - | - | [Link](https://blockscout.com/astar/tx/0x6a7caa458e4d59d8e82f735a7e881ff8078de6b3582dcc86206870b5682b33e5) |
 | test1 | `0xdfe3DDBcB66cbC3a88816C0f876F76b2B60884fe` | 1% | 2% |　[Link](https://blockscout.com/astar/tx/0x2675efce01c2b55edb1b364070f451be282cbd0d1d2b47282fa4fbe41b09a088) |
-| test2 | `0xDeBeA7Bf019285Cd3ddAd69A6aC1c6E5260d1083` | 3% | 0% | [Link](https://blockscout.com/astar/tx/)　|
-| test3 | - | 0% | 5% | [Link](https://blockscout.com/astar/tx/) |
+| test2 | `0xDeBeA7Bf019285Cd3ddAd69A6aC1c6E5260d1083` | 3% | 0% | [Link]()　|
+| test3 | - | 0% | 5% | [Link]() |
 
 ## コントラクト
 
