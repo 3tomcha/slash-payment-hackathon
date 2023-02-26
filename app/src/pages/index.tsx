@@ -42,11 +42,7 @@ export default function Home() {
             <Stack mt="6" spacing="1">
               <Heading size="md">Experience BackSlash !</Heading>
               <Text>BackSlash is a referral program using Slash Payment.</Text>
-              <Text>
-                First, a referral code is issued by the Slash extension. When
-                the referral code is entered at the time of payment, cash back
-                is given to the buyer and the referrer.
-              </Text>
+              <Text>If you have a referral code, please enter it.</Text>
               <Text color="blue.600" fontSize="2xl">
                 ${process.env.NEXT_PUBLIC_PRICE}
               </Text>
