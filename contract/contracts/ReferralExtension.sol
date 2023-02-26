@@ -11,12 +11,11 @@ contract ReferralExtension is ISlashCustomPlugin, Ownable {
 
     struct Referral {
         address rewardAddress;
-        uint16 rewardRate;
-        uint16 cashBackRate;
+        uint256 rewardRate;
+        uint256 cashBackRate;
     }
 
-    uint16 public constant RATE_PRECISION = 10000;
-    mapping(string => Referral) private _referralCode;
+    uint256 public constant RATE_PRECISION = 10000;
 
     /**
      * @dev Receive payment
@@ -32,67 +31,26 @@ contract ReferralExtension is ISlashCustomPlugin, Ownable {
         bytes calldata _reserved
     ) external payable override {
         require(_amount > 0, "invalid amount");
+        IERC20(_receiveToken).universalTransferFromSenderToThis(_amount);
 
-        string memory usedReferralCode = abi.decode(_reserved, (string));
-        Referral memory referral = _referralCode[usedReferralCode];
+        Referral memory referral = abi.decode(_reserved, (Referral));
 
         uint256 rewardAmount = (_amount * referral.rewardRate) / RATE_PRECISION;
-        uint256 cashBackAmount = (_amount * referral.cashBackRate) /
-            RATE_PRECISION;
+        uint256 cashBackAmount = (_amount * referral.cashBackRate) / RATE_PRECISION;
         uint256 ownerAmount = _amount - rewardAmount - cashBackAmount;
 
         if (rewardAmount > 0) {
-            IERC20(_receiveToken).universalTransfer(
-                referral.rewardAddress,
-                rewardAmount
-            );
+            IERC20(_receiveToken).universalTransfer(referral.rewardAddress, rewardAmount);
         }
         if (cashBackAmount > 0) {
-            IERC20(_receiveToken).universalTransfer(msg.sender, cashBackAmount);
+            IERC20(_receiveToken).universalTransfer(tx.origin, cashBackAmount);
         }
         IERC20(_receiveToken).universalTransfer(owner(), ownerAmount);
     }
 
     /**
-     * @dev Set referral code
-     * @param _code referral code
-     * @param _rewardAddress reward address
-     * @param _rewardRate reward rate
-     * @param _cashBackRate cash back rate
+     * @dev Get slash extension interface version
      */
-    function setReferralCode(
-        string memory _code,
-        address _rewardAddress,
-        uint16 _rewardRate,
-        uint16 _cashBackRate
-    ) external onlyOwner {
-        require(_rewardRate + _cashBackRate <= RATE_PRECISION, "invalid rate");
-        require(_rewardAddress != address(0), "invalid reward address");
-        require(
-            _referralCode[_code].rewardAddress == address(0),
-            "code already exists"
-        );
-
-        _referralCode[_code] = Referral(
-            _rewardAddress,
-            _rewardRate,
-            _cashBackRate
-        );
-    }
-
-    /**
-     * @dev Delete referral code
-     * @param _code referral code
-     */
-    function deleteReferralCode(string memory _code) external onlyOwner {
-        require(
-            _referralCode[_code].rewardAddress != address(0),
-            "code not exists"
-        );
-
-        delete _referralCode[_code];
-    }
-
     function supportSlashExtensionInterface()
         external
         pure

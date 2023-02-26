@@ -1,9 +1,39 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import crypto from "crypto";
 import axios from "axios";
+import { ethers } from "ethers";
 
 type Data = {
   paymentUrl: string;
+};
+
+const getReferral = (referralCode: string) => {
+  // test setting
+  if (referralCode === "test1") {
+    return {
+      rewardAddress: "0xdfe3DDBcB66cbC3a88816C0f876F76b2B60884fe",
+      rewardRate: 100,
+      cashBackRate: 200,
+    };
+  } else if (referralCode === "test2") {
+    return {
+      rewardAddress: "0xDeBeA7Bf019285Cd3ddAd69A6aC1c6E5260d1083",
+      rewardRate: 300,
+      cashBackRate: 0,
+    };
+  } else if (referralCode === "test3") {
+    return {
+      rewardAddress: ethers.constants.AddressZero,
+      rewardRate: 0,
+      cashBackRate: 500,
+    };
+  } else {
+    return {
+      rewardAddress: ethers.constants.AddressZero,
+      rewardRate: 0,
+      cashBackRate: 0,
+    };
+  }
 };
 
 export default async function handler(
@@ -18,6 +48,8 @@ export default async function handler(
   const amount = Number(process.env.NEXT_PUBLIC_PRICE); /* Price */
   const amountType = "USD"; /* Currency of the Price  */
   const orderCode = crypto.randomUUID(); /* Unique per api call  */
+  // get referral code from request body
+  const referral = getReferral(referralCode);
 
   // automatically generated on the merchant management screen
   const authenticationToken = process.env.SLASH_AUTH_TOKEN;
@@ -27,6 +59,13 @@ export default async function handler(
   const raw = orderCode + "::" + amount + "::" + hashToken;
   const hashHex = crypto.createHash("sha256").update(raw, "utf8").digest("hex");
 
+  // encode referral code
+  const extReserved = ethers.utils.AbiCoder.prototype.encode(
+    ["address", "uint256", "uint256"],
+    [referral.rewardAddress, referral.rewardRate, referral.cashBackRate]
+  );
+  console.log(extReserved);
+
   // call Paument Request API
   const requestObj = {
     identification_token: authenticationToken,
@@ -34,7 +73,7 @@ export default async function handler(
     verify_token: hashHex,
     amount: amount,
     amount_type: amountType,
-    ext_reserved: referralCode,
+    ext_reserved: extReserved,
     ext_description: referralCode ? `referral code: ${referralCode}` : "",
   };
   const paymentRequestUrl = process.env.SLASH_PAYMENT_REQUEST_URL ?? "";

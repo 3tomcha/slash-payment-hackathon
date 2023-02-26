@@ -13,4 +13,4 @@ npx hardhat run scripts/deploy.ts --network astar
 npx hardhat verify --network astar 0x000..
 ```
 
-https://blockscout.com/astar/address/0x6FBe5b8ddef07fdDeC2F5A8A29136abD73D155f1
+https://blockscout.com/astar/address/0xc650f52Eb34374605bab7B0B285DC18629Eea6a9
