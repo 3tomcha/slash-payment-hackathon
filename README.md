@@ -11,10 +11,10 @@ Astar&Slashハッカソンで作成しました。
 -> [プロダクトページ](https://app.akindo.io/communities/mVE6QvgdZsNQ9NMA/products/Nmv64W7WlUdxAWQe8)
 
 
-## テストサイト
+## デモサイト
 https://back-slash.vercel.app/
 
-テストサイトでは以下の設定をしています。
+デモサイトでは以下の設定をしています。
 
 コントラクトオーナー : `0xD214146C6E6051eeDF4de733Aa1d62F089D5928A`
 
